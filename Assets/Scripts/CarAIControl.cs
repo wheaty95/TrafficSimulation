@@ -205,6 +205,7 @@ namespace UnityStandardAssets.Vehicles.Car
                 var otherAI = col.rigidbody.GetComponent<CarAIControl>();
                 if (otherAI != null)
                 {
+                    Debug.Log(otherAI);
                     // we'll take evasive action for 1 second
                     m_AvoidOtherCarTime = Time.time + 1;
 
@@ -242,7 +243,7 @@ namespace UnityStandardAssets.Vehicles.Car
             {
                 DrawString(Mathf.RoundToInt(m_CarController.CurrentSpeed).ToString()+" "+m_CarController.GetSpeedType.ToString(), transform.position + new Vector3(0, 7, 0), Color.black);
                 DrawString("Lap: "+ m_lapNumber, transform.position + new Vector3(0, 5, 0), Color.black);
-                DrawString("Waypoint: "+ m_currentWaypoint, transform.position + new Vector3(0, 3, 0), Color.black);
+                DrawString("Waypoint: "+ m_currentWaypointIndex, transform.position + new Vector3(0, 3, 0), Color.black);
             }
         }
 
