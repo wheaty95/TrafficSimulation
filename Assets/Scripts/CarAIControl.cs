@@ -102,8 +102,10 @@ namespace UnityStandardAssets.Vehicles.Car
                             // if it's different to our current angle, we need to be cautious (i.e. slow down) a certain amount
                             float cautiousnessRequired = Mathf.InverseLerp(0, m_CautiousMaxAngle,Mathf.Max(spinningAngle, approachingCornerAngle));
                             float distanceCautiousFactor = Mathf.InverseLerp(m_CautiousMaxDistance, 0, delta.magnitude);
+
+                            //take distance into account
+                            //if we are too far from the corner, reduce the caution level
                             cautiousnessRequired *= distanceCautiousFactor;
-                            Debug.Log("cautiousnessRequired: " + cautiousnessRequired + "     approachingCornerAngle: " + approachingCornerAngle);
 
                             desiredSpeed = Mathf.Lerp(m_CarController.MaxSpeed, m_CarController.MaxSpeed * m_CautiousSpeedFactor, cautiousnessRequired);
                             break;
