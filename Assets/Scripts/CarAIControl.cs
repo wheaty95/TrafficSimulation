@@ -47,9 +47,7 @@ namespace UnityStandardAssets.Vehicles.Car
         private Rigidbody m_Rigidbody;
 
         //race
-        private int m_lapNumber = 1;
-        private int m_currentWaypointIndex = 0;
-        private WayPoint m_currentWaypoint;
+        [SerializeField] private WayPoint m_currentWaypoint;
 
         private void Awake()
         {
@@ -64,7 +62,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
         private void Start()
         {
-            SetTarget(RaceManager.Instance.GetWayPoint(ref m_lapNumber, ref m_currentWaypointIndex));
+            SetTarget(m_currentWaypoint);
         }
 
         private void FixedUpdate()
@@ -184,8 +182,7 @@ namespace UnityStandardAssets.Vehicles.Car
                 // if appropriate, stop driving when we're close enough to the target.
                 if (localTarget.magnitude < m_currentWaypoint.ReachTargetThreshold)
                 {
-                    m_currentWaypointIndex++;
-                    SetTarget(RaceManager.Instance.GetWayPoint(ref m_lapNumber, ref m_currentWaypointIndex));
+                    SetTarget(m_currentWaypoint.nextWayPoint);
                 }
             }
         }
@@ -197,7 +194,7 @@ namespace UnityStandardAssets.Vehicles.Car
             return localTarget.magnitude < m_currentWaypoint.ReachTargetThreshold;
         }
 
-    private void OnCollisionStay(Collision col)
+        private void OnCollisionStay(Collision col)
         {
             // detect collision against other cars, so that we can take evasive action
             if (col.rigidbody != null)
@@ -242,8 +239,7 @@ namespace UnityStandardAssets.Vehicles.Car
             if (Application.isPlaying)  // or check the app debug flag
             {
                 DrawString(Mathf.RoundToInt(m_CarController.CurrentSpeed).ToString()+" "+m_CarController.GetSpeedType.ToString(), transform.position + new Vector3(0, 7, 0), Color.black);
-                DrawString("Lap: "+ m_lapNumber, transform.position + new Vector3(0, 5, 0), Color.black);
-                DrawString("Waypoint: "+ m_currentWaypointIndex, transform.position + new Vector3(0, 3, 0), Color.black);
+                Gizmos.DrawLine(transform.position, m_Target.position);
             }
         }
 
