@@ -53,7 +53,24 @@ public class WaypointManagerWindow : UnityEditor.EditorWindow
             {
                 Remove();
             }
+            if (GUILayout.Button("Add Branch"))
+            {
+                AddBranch();
+            }
         }
+    }
+
+    private void AddBranch()
+    {
+        GameObject waypointObject = new GameObject("Waypoint" + wayPointRoot.childCount, typeof(WayPoint));
+        waypointObject.transform.SetParent(wayPointRoot, false);
+        WayPoint newWayPoint = waypointObject.GetComponent<WayPoint>();
+        WayPoint branchedFrom = Selection.activeGameObject.GetComponent<WayPoint>();
+        branchedFrom.branches.Add(newWayPoint);
+
+        newWayPoint.transform.position = branchedFrom.transform.position;
+        newWayPoint.transform.forward = branchedFrom.transform.forward;
+        Selection.activeGameObject = newWayPoint.gameObject;
     }
 
     private void AddBefore()

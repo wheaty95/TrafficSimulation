@@ -31,6 +31,15 @@ public class WaypointEditor : MonoBehaviour
             Gizmos.DrawLine(waypoint.transform.position, waypoint.nextWayPoint.transform.position);
         }
         Gizmos.DrawSphere(waypoint.transform.position, 0.1f);
+
+        if (waypoint.branches != null)
+        {
+            foreach (WayPoint way in waypoint.branches)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawLine(waypoint.transform.position, way.transform.position);
+            }
+        }
     }
 
     private static void DrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)

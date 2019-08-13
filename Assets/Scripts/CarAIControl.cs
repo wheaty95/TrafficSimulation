@@ -182,7 +182,22 @@ namespace UnityStandardAssets.Vehicles.Car
                 // if appropriate, stop driving when we're close enough to the target.
                 if (localTarget.magnitude < m_currentWaypoint.ReachTargetThreshold)
                 {
-                    SetTarget(m_currentWaypoint.nextWayPoint);
+                    if (m_currentWaypoint.branches != null && m_currentWaypoint.branches.Count > 0)
+                    {
+                        bool branch = Random.Range(0f, 1f) <= m_currentWaypoint.branchRatio;
+                        if (branch)
+                        {
+                            SetTarget(m_currentWaypoint.branches[Random.Range(0, m_currentWaypoint.branches.Count)]);
+                        }
+                        else
+                        {
+                            SetTarget(m_currentWaypoint.nextWayPoint);
+                        }
+                    }
+                    else
+                    {
+                        SetTarget(m_currentWaypoint.nextWayPoint);
+                    }
                 }
             }
         }
