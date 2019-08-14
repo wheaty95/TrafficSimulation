@@ -36,8 +36,11 @@ public class WaypointEditor : MonoBehaviour
         {
             foreach (WayPoint way in waypoint.branches)
             {
-                Gizmos.color = Color.blue;
-                Gizmos.DrawLine(waypoint.transform.position, way.transform.position);
+                if (way)
+                {
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawLine(waypoint.transform.position, way.transform.position);
+                }
             }
         }
     }

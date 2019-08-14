@@ -66,11 +66,13 @@ public class WaypointManagerWindow : UnityEditor.EditorWindow
         waypointObject.transform.SetParent(wayPointRoot, false);
         WayPoint newWayPoint = waypointObject.GetComponent<WayPoint>();
         WayPoint branchedFrom = Selection.activeGameObject.GetComponent<WayPoint>();
+        Undo.RegisterCompleteObjectUndo(branchedFrom, "New Waypoint");
         branchedFrom.branches.Add(newWayPoint);
 
         newWayPoint.transform.position = branchedFrom.transform.position;
         newWayPoint.transform.forward = branchedFrom.transform.forward;
         Selection.activeGameObject = newWayPoint.gameObject;
+        Undo.RegisterCreatedObjectUndo(waypointObject, "New Waypoint");
     }
 
     private void AddBefore()
@@ -94,6 +96,8 @@ public class WaypointManagerWindow : UnityEditor.EditorWindow
         selected.previousWayPoint = newWayPoint;
         newWayPoint.transform.SetSiblingIndex(selected.transform.GetSiblingIndex());
         Selection.activeGameObject = newWayPoint.gameObject;
+        Undo.RegisterCreatedObjectUndo(waypointObject, "New Waypoint");
+
     }
 
     private void AddAfter()
@@ -116,6 +120,7 @@ public class WaypointManagerWindow : UnityEditor.EditorWindow
         selected.nextWayPoint = newWayPoint;
         newWayPoint.transform.SetSiblingIndex(selected.transform.GetSiblingIndex());
         Selection.activeGameObject = newWayPoint.gameObject;
+        Undo.RegisterCreatedObjectUndo(waypointObject, "New Waypoint");
     }
 
     private void Remove()
@@ -123,16 +128,17 @@ public class WaypointManagerWindow : UnityEditor.EditorWindow
         WayPoint selected = Selection.activeGameObject.GetComponent<WayPoint>();
         if (selected.nextWayPoint)
         {
+            Undo.RecordObject(selected.nextWayPoint.previousWayPoint, "point.previousWayPoint");
             selected.nextWayPoint.previousWayPoint = selected.previousWayPoint;
         }
 
         if (selected.previousWayPoint)
         {
+            Undo.RecordObject(selected.previousWayPoint.nextWayPoint, "point.previousWayPoint");
             selected.previousWayPoint.nextWayPoint = selected.nextWayPoint;
             Selection.activeGameObject = selected.previousWayPoint.gameObject;
         }
-        DestroyImmediate(selected.gameObject);
-
+        Undo.DestroyObjectImmediate(selected.gameObject);
     }
 
     private void CreateWayPoint()
@@ -143,12 +149,22 @@ public class WaypointManagerWindow : UnityEditor.EditorWindow
         WayPoint point = waypoint.GetComponent<WayPoint>();
         if (wayPointRoot.childCount > 1)
         {
+            if (point.previousWayPoint != null)
+            {
+                Undo.RecordObject(point.previousWayPoint, "point.previousWayPoint");
+            }
             point.previousWayPoint = wayPointRoot.GetChild(wayPointRoot.childCount - 2).GetComponent<WayPoint>();
-            point.previousWayPoint.nextWayPoint = point;
 
+            if (point.previousWayPoint.nextWayPoint != null)
+            {
+                Undo.RecordObject(point.previousWayPoint.nextWayPoint, "point.previousWayPoint");
+            }
+
+            point.previousWayPoint.nextWayPoint = point;
             point.transform.position = point.previousWayPoint.transform.position;
             point.transform.forward = point.previousWayPoint.transform.forward;
         }
         Selection.activeGameObject = point.gameObject;
+        Undo.RegisterCreatedObjectUndo(waypoint, "New Waypoint");
     }
 }
