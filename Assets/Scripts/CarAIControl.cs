@@ -45,9 +45,15 @@ namespace UnityStandardAssets.Vehicles.Car
         private float m_AvoidOtherCarSlowdown;    // how much to slow down due to colliding with another car, whilst avoiding
         private float m_AvoidPathOffset;          // direction (-1 or 1) in which to offset path to avoid other car, whilst avoiding
         private Rigidbody m_Rigidbody;
+        private bool m_isStopping;
 
         //race
         [SerializeField] private WayPoint m_currentWaypoint;
+
+        public WayPoint GetCurrentWaypoint()
+        {
+            return m_currentWaypoint;
+        }
 
         private void Awake()
         {
@@ -63,6 +69,13 @@ namespace UnityStandardAssets.Vehicles.Car
         private void Start()
         {
             SetTarget(m_currentWaypoint);
+        }
+
+        public void Stop()
+        {
+            m_Driving = false;
+            m_isStopping = true;
+            m_CarController.Move(0, 0, -1f, 1f);
         }
 
         private void FixedUpdate()
@@ -175,30 +188,13 @@ namespace UnityStandardAssets.Vehicles.Car
 
                 // get the amount of steering needed to aim the car towards the target
                 float steer = Mathf.Clamp(targetAngle * m_SteerSensitivity, -1, 1) * Mathf.Sign(m_CarController.CurrentSpeed);
-
+                if (m_CarController.CurrentSpeed <= 0.1f || m_isStopping)
+                {
+                    //we arent moving, so stop trying to turn the wheel
+                    steer = 0f;
+                }
                 // feed input to the car controller.
                 m_CarController.Move(steer, accel, accel, 0f);
-
-                // if appropriate, stop driving when we're close enough to the target.
-                if (localTarget.magnitude < m_currentWaypoint.ReachTargetThreshold)
-                {
-                    if (m_currentWaypoint.branches != null && m_currentWaypoint.branches.Count > 0)
-                    {
-                        bool branch = Random.Range(0f, 1f) <= m_currentWaypoint.branchRatio;
-                        if (branch)
-                        {
-                            SetTarget(m_currentWaypoint.branches[Random.Range(0, m_currentWaypoint.branches.Count)]);
-                        }
-                        else
-                        {
-                            SetTarget(m_currentWaypoint.nextWayPoint);
-                        }
-                    }
-                    else
-                    {
-                        SetTarget(m_currentWaypoint.nextWayPoint);
-                    }
-                }
             }
         }
 
@@ -217,7 +213,6 @@ namespace UnityStandardAssets.Vehicles.Car
                 var otherAI = col.rigidbody.GetComponent<CarAIControl>();
                 if (otherAI != null)
                 {
-                    Debug.Log(otherAI);
                     // we'll take evasive action for 1 second
                     m_AvoidOtherCarTime = Time.time + 1;
 
@@ -244,6 +239,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
         public void SetTarget(WayPoint target)
         {
+            m_isStopping = false;
             m_currentWaypoint = target;
             m_Target = target.transform;
             m_Driving = true;

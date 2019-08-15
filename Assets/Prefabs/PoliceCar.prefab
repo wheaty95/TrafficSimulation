@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 5906884904301574451}
   - component: {fileID: 3565620662918010613}
   - component: {fileID: 7179366843586665469}
+  - component: {fileID: 3902127978571011360}
   - component: {fileID: 6065300363245584389}
   - component: {fileID: 8466123068710057970}
   m_Layer: 0
@@ -287,6 +288,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5572407, y: 0.77031267, z: 3.6813345}
   m_Center: {x: -0.00002932555, y: 0.4446501, z: -0.0384959}
+--- !u!114 &3902127978571011360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8579519404680574740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72101f62f5a98444fa67b9dfdc602408, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_type: 1
+  m_start: {fileID: 0}
+  m_end: {fileID: 0}
+  m_current: {fileID: 0}
 --- !u!114 &6065300363245584389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,6 +329,7 @@ MonoBehaviour:
   m_AccelWanderSpeed: 0
   m_BrakeCondition: 1
   m_Driving: 1
+  m_currentWaypoint: {fileID: 0}
 --- !u!114 &8466123068710057970
 MonoBehaviour:
   m_ObjectHideFlags: 0

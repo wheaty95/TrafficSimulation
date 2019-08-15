@@ -112,7 +112,7 @@ public class WaypointManagerWindow : UnityEditor.EditorWindow
         waypointObject.transform.position = selected.transform.position;
         waypointObject.transform.forward = selected.transform.forward;
 
-        if (selected.nextWayPoint != null) ;
+        if (selected.nextWayPoint != null)
         {
             selected.nextWayPoint.previousWayPoint = newWayPoint;
             newWayPoint.nextWayPoint = selected.nextWayPoint;
