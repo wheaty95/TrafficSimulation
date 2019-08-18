@@ -6,7 +6,7 @@
 <li>Handle Crashes (?)</li>
 </ul>
 
-2 Branches for 2 different approachs
+2 Branches for 2 different approaches
 
 <ul>
 <li>AIWayPoint: Using Unitys nav mesh system. Only really works on small city blocks.</li>
