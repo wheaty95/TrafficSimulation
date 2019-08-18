@@ -8,6 +8,7 @@
 
 2 Branches for 2 different approachs
 
-
-AIWayPoint: Using Unitys nav mesh system. Only really works on small city blocks.
-Master: Using a linked list node based system. Could get complex for a bigger city.
+<ul>
+<li>AIWayPoint: Using Unitys nav mesh system. Only really works on small city blocks.</li>
+<li>Master: Using a linked list node based system. Could get complex for a bigger city.</li>
+</ul>
